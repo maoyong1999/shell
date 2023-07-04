@@ -23,17 +23,23 @@ dns1=${dns1:-223.5.5.5}
 cat <<EOF > /etc/sysconfig/network-scripts/ifcfg-$nic
 TYPE=Ethernet
 BOOTPROTO=static
-NAME=$nic
-DEVICE=$nic
-ONBOOT=yes
 IPADDR=$ip_address
 NETMASK=$netmask
 GATEWAY=$gateway
-DNS1=$dns1
+DEFROUTE=yes
+IPV4_FAILURE_FATAL=no
+IPV6INIT=yes
+IPV6_AUTOCONF=yes
+IPV6_DEFROUTE=yes
+IPV6_FAILURE_FATAL=no
+IPV6_ADDR_GEN_MODE=stable-privacy
+DEVICE=$nic
+ONBOOT=yes
 EOF
 
 # 重启网络服务
-systemctl restart ens224
+# systemctl restart network
+ifup $nic
 
 # 停止防火墙服务
 systemctl stop firewalld
