@@ -11,7 +11,7 @@ read -p "请输入IP地址: " ip_address
 read -p "请输入子网掩码[${NETMASK:-255.255.255.0}]: " netmask
 netmask=${netmask:-255.255.255.0}
 
-# 提示用户输入网关，默认为192.168.0.1
+# 提示用户输入网关，默认为192.168.100.1
 read -p "请输入网关[${GATEWAY:-192.168.100.1}]: " gateway
 gateway=${gateway:-192.168.100.1}
 
@@ -33,7 +33,7 @@ DNS1=$dns1
 EOF
 
 # 重启网络服务
-systemctl restart network
+systemctl restart ens224
 
 # 停止防火墙服务
 systemctl stop firewalld
@@ -101,12 +101,3 @@ echo "0 0 * * * /usr/sbin/ntpdate ntp.aliyun.com >/dev/null 2>&1" >> /etc/cronta
 
 # 重启 crond 服务
 systemctl restart crond
-
-# 升级系统
-yum update -y
-
-# 安装 Git
-yum install -y git
-
-# 验证 Git 是否安装成功
-git --version
