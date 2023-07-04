@@ -30,11 +30,12 @@ systemctl enable docker
 # 配置 Docker 镜像仓库为阿里云的镜像仓库
 cat <<EOF > /etc/docker/daemon.json
 {
-  "registry-mirrors": ["https://registry.cn-hangzhou.aliyuncs.com"]
+  "registry-mirrors": ["https://jx9181e6.mirror.aliyuncs.com"]
 }
 EOF
 
 # 重启 Docker
+systemctl daemon-reload
 systemctl restart docker
 
 # 创建需要挂载的目录并配置目录的读写权限
