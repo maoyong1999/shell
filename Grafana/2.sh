@@ -1,4 +1,4 @@
-t#!/bin/bash
+#!/bin/bash
 
 # 麻烦编写一段脚本,要求如下:
 # 1.卸载旧版本Docker
@@ -48,7 +48,7 @@ chmod -R 777 /opt/grafana/data
 
 # 下载 Prometheus 配置文件
 # curl -o /opt/prometheus/prometheus.yml https://raw.githubusercontent.com/prometheus/prometheus/main/documentation/examples/prometheus.yml
-cp ./prometheus.yml /opt/prometheus/prometheus.yml
+cp ./prometheus.yml /opt/prometheus/
 
 # 下载 Alert Manager 配置文件
 # curl -o /opt/alertmanager/alertmanager.yml https://raw.githubusercontent.com/prometheus/alertmanager/main/doc/examples/simple.yml
