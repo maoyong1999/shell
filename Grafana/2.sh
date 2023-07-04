@@ -88,6 +88,7 @@ services:
 EOF
 
 # 启动 Prometheus、Alert Manager 和 Grafana
-cd /opt
+cd /opt/
+
 docker-compose up -d
 
