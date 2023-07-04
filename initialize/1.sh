@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 提示用户输入网卡名称，默认为eth1
-read -p "请输入网卡名称[${NIC:-eth224}]: " nic
+read -p "请输入网卡名称[${NIC:-ens224}]: " nic
 nic=${nic:-ens224}
 
 # 提示用户输入IP地址
