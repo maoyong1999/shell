@@ -47,10 +47,12 @@ mkdir -p /opt/grafana/data
 chmod -R 777 /opt/grafana/data
 
 # 下载 Prometheus 配置文件
-curl -o /opt/prometheus/prometheus.yml https://raw.githubusercontent.com/prometheus/prometheus/main/documentation/examples/prometheus.yml
+# curl -o /opt/prometheus/prometheus.yml https://raw.githubusercontent.com/prometheus/prometheus/main/documentation/examples/prometheus.yml
+cp ./prometheus.yml /opt/prometheus/prometheus.yml
 
 # 下载 Alert Manager 配置文件
-curl -o /opt/alertmanager/alertmanager.yml https://raw.githubusercontent.com/prometheus/alertmanager/main/doc/examples/simple.yml
+# curl -o /opt/alertmanager/alertmanager.yml https://raw.githubusercontent.com/prometheus/alertmanager/main/doc/examples/simple.yml
+cp ./simple.yml /opt/alertmanager/alertmanager.yml
 
 # 创建 Docker-Compose 配置文件
 cat <<EOF > /opt/docker-compose.yml
