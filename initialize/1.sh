@@ -105,3 +105,4 @@ systemctl restart crond
 # 升级系统
 yum update -y
 
+## 需要增加安装git的脚本
