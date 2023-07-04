@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # 提示用户输入网卡名称，默认为eth1
-read -p "请输入网卡名称[${NIC:-eth1}]: " nic
-nic=${nic:-eth1}
+read -p "请输入网卡名称[${NIC:-eth224}]: " nic
+nic=${nic:-ens224}
 
 # 提示用户输入IP地址
 read -p "请输入IP地址: " ip_address
@@ -12,8 +12,8 @@ read -p "请输入子网掩码[${NETMASK:-255.255.255.0}]: " netmask
 netmask=${netmask:-255.255.255.0}
 
 # 提示用户输入网关，默认为192.168.0.1
-read -p "请输入网关[${GATEWAY:-192.168.0.1}]: " gateway
-gateway=${gateway:-192.168.0.1}
+read -p "请输入网关[${GATEWAY:-192.168.100.1}]: " gateway
+gateway=${gateway:-192.168.100.1}
 
 # 提示用户输入DNS服务器，默认为223.5.5.5
 read -p "请输入DNS服务器[${DNS1:-223.5.5.5}]: " dns1
