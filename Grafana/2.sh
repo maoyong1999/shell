@@ -52,7 +52,7 @@ cp ./prometheus.yml /opt/prometheus/
 
 # 下载 Alert Manager 配置文件
 # curl -o /opt/alertmanager/alertmanager.yml https://raw.githubusercontent.com/prometheus/alertmanager/main/doc/examples/simple.yml
-cp ./simple.yml /opt/alertmanager/alertmanager.yml
+cp ./alertmanager.yml /opt/alertmanager/
 
 # 创建 Docker-Compose 配置文件
 cat <<EOF > /opt/docker-compose.yml
