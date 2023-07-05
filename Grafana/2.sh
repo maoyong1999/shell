@@ -8,7 +8,6 @@
 # 3.安装和配置Prometheus、Alert Manager和Grafana
 # 4.创建需要挂载的目录并配置目录的读写权限
 
-谢谢！
 
 # 卸载旧版本 Docker
 yum remove -y docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-engine
@@ -48,11 +47,11 @@ chmod -R 777 /opt/grafana/data
 
 # 下载 Prometheus 配置文件
 # curl -o /opt/prometheus/prometheus.yml https://raw.githubusercontent.com/prometheus/prometheus/main/documentation/examples/prometheus.yml
-cp ./prometheus.yml /opt/prometheus/
+cp /root/grafana/prometheus.yml /opt/prometheus/
 
 # 下载 Alert Manager 配置文件
 # curl -o /opt/alertmanager/alertmanager.yml https://raw.githubusercontent.com/prometheus/alertmanager/main/doc/examples/simple.yml
-cp ./alertmanager.yml /opt/alertmanager/
+cp /root/grafana/alertmanager.yml /opt/alertmanager/
 
 # 创建 Docker-Compose 配置文件
 cat <<EOF > /opt/docker-compose.yml
