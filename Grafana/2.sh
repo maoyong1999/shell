@@ -64,7 +64,7 @@ services:
     ports:
       - 9090:9090
     volumes:
-      - /opt/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - /opt/prometheus/:/etc/prometheus/
       - /opt/prometheus/data:/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
@@ -75,7 +75,7 @@ services:
     ports:
       - 9093:9093
     volumes:
-      - /opt/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+      - /opt/alertmanager/:/etc/alertmanager/
       - /opt/alertmanager/data:/data
     command:
       - '--config.file=/etc/alertmanager/alertmanager.yml'
