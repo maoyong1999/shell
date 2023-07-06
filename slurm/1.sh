@@ -1,5 +1,18 @@
 #!/bin/bash
 
+# 安装 NFS
+yum install -y nfs-utils
+
+# 创建共享目录
+mkdir /shared
+
+# 配置 NFS
+echo "/shared *(rw,sync,no_root_squash)" >> /etc/exports
+
+# 启动 NFS
+systemctl enable nfs-server
+systemctl start nfs-server
+
 # 安装必要的依赖
 yum install -y epel-release
 yum install -y munge munge-libs munge-devel mariadb-server mariadb-devel mariadb-libs mariadb-devel slurm slurm-munge slurm-slurmdbd slurm-devel slurm-perlapi
