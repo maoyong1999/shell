@@ -109,8 +109,80 @@ sed -i 's/StorageHost=localhost/StorageHost=m1/g' /etc/slurm/slurmdbd.conf
 sed -i 's/StoragePass=slurm/StoragePass=mysql1234/g' /etc/slurm/slurmdbd.conf
 sed -i 's/StorageUser=slurm/StorageUser=root/g' /etc/slurm/slurmdbd.conf
 sed -i 's/StoragePort=6819/StoragePort=3306/g' /etc/slurm/slurmdbd.conf
+
+# Set variables
+CONTROL_NODE="m1"
+COMPUTE_NODES=("c1" "c2")
+
+# Copy Slurm configuration file to compute nodes
+for node in "${COMPUTE_NODES[@]}"; do
+    scp /etc/slurm/slurm.conf $node:/etc/slurm/
+done
+
+# Copy Slurm Accounting to Compute Nodes
+scp /etc/slurm/slurmdbd.conf c1:/etc/slurm/slurmdbd.conf
+scp /etc/slurm/slurmdbd.conf c2:/etc/slurm/slurmdbd.conf
+chown slurm:slurm /etc/slurm/slurmdbd.conf
+chmod 644 /etc/slurm/slurmdbd.conf
+
+# Set permissions for Slurm configuration file
+chown slurm:slurm /etc/slurm/slurm.conf
+chmod 644 /etc/slurm/slurm.conf
+
+# Set permissions for Slurm Accounting configuration file
+chown slurm:slurm /etc/slurm/slurmdbd.conf
+chmod 644 /etc/slurm/slurmdbd.conf
+
+# Set permissions for Slurm state save directory
+chown slurm:slurm /var/spool/slurm
+chmod 755 /var/spool/slurm
+
+# Set permissions for Slurm state save directory on compute nodes
+for node in "${COMPUTE_NODES[@]}"; do
+    ssh $node chown slurm:slurm /var/spool/slurm
+    ssh $node chmod 755 /var/spool/slurm
+done
+
+# Set permissions for Slurm log directory
+chown slurm:slurm /var/log/slurm
+chmod 755 /var/log/slurm
+
+# Set permissions for Slurm log directory on compute nodes
+for node in "${COMPUTE_NODES[@]}"; do
+    ssh $node chown slurm:slurm /var/log/slurm
+    ssh $node chmod 755 /var/log/slurm
+done
+
+# Set password for Slurm user
+echo "mysql1234" | passwd --stdin slurm
+
+# Create Slurm database
+
+# Install MariaDB
+yum install -y mariadb-server mariadb
+
+# Start MariaDB
+systemctl enable mariadb
+systemctl start mariadb
+
+# Configure MariaDB
+mysql -u root -e "CREATE DATABASE slurm_acct_db;"
+mysql -u root -e "CREATE USER 'slurm'@'localhost';"
+
+# Set password for Slurm user
+
+
+# Grant privileges to Slurm user
+mysql -u root -e "GRANT ALL ON slurm_acct_db.* TO 'slurm'@'localhost';"
+mysql -u root -e "FLUSH PRIVILEGES;"
+
+# Create Slurm database
+mysql -u root slurm_acct_db < /usr/share/doc/slurmdbd/mysql.sql
+
+# Start Slurm Accounting
 systemctl enable slurmdbd
 systemctl start slurmdbd
+
 
 # Start Slurm
 systemctl enable slurmd
