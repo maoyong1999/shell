@@ -1,5 +1,24 @@
 #!/bin/bash
 
+# Set variables
+CONTROL_NODE="m1"
+COMPUTE_NODES=("c1" "c2")
+CONTROL_NODE_IP="192.168.100.16"
+C1_IP="192.168.100.15"
+C2_IP="192.168.100.17"
+
+# Configure hosts file on control node
+echo "$CONTROL_NODE_IP $CONTROL_NODE" >> /etc/hosts
+echo "$C1_IP c1" >> /etc/hosts
+echo "$C2_IP c2" >> /etc/hosts
+
+# Configure hosts file on compute nodes
+for node in "${COMPUTE_NODES[@]}"; do
+    ssh $node "echo '$CONTROL_NODE_IP $CONTROL_NODE' >> /etc/hosts"
+    ssh $node "echo '$C1_IP c1' >> /etc/hosts"
+    ssh $node "echo '$C2_IP c2' >> /etc/hosts"
+done
+
 # Set limits for all users
 echo "* soft nofile 65535" >> /etc/security/limits.conf
 echo "* hard nofile 65535" >> /etc/security/limits.conf
@@ -110,10 +129,6 @@ sed -i 's/StoragePass=slurm/StoragePass=mysql1234/g' /etc/slurm/slurmdbd.conf
 sed -i 's/StorageUser=slurm/StorageUser=root/g' /etc/slurm/slurmdbd.conf
 sed -i 's/StoragePort=6819/StoragePort=3306/g' /etc/slurm/slurmdbd.conf
 
-# Set variables
-CONTROL_NODE="m1"
-COMPUTE_NODES=("c1" "c2")
-
 # Copy Slurm configuration file to compute nodes
 for node in "${COMPUTE_NODES[@]}"; do
     scp /etc/slurm/slurm.conf $node:/etc/slurm/
@@ -168,9 +183,6 @@ systemctl start mariadb
 # Configure MariaDB
 mysql -u root -e "CREATE DATABASE slurm_acct_db;"
 mysql -u root -e "CREATE USER 'slurm'@'localhost';"
-
-# Set password for Slurm user
-
 
 # Grant privileges to Slurm user
 mysql -u root -e "GRANT ALL ON slurm_acct_db.* TO 'slurm'@'localhost';"
