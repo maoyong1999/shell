@@ -91,5 +91,5 @@ EOF
 # 启动 Prometheus、Alert Manager 和 Grafana
 cd /opt/
 
-docker-compose up -d
+docker-compose up -d -f /opt/docker-compose.yml
 
