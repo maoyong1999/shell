@@ -1,55 +1,119 @@
 #!/bin/bash
 
-# 安装 NFS
+# Set limits for all users
+echo "* soft nofile 65535" >> /etc/security/limits.conf
+echo "* hard nofile 65535" >> /etc/security/limits.conf
+echo "* soft nproc 65535" >> /etc/security/limits.conf
+echo "* hard nproc 65535" >> /etc/security/limits.conf
+
+# Set limits for specific user
+echo "james soft nofile 65535" >> /etc/security/limits.conf
+echo "james hard nofile 65535" >> /etc/security/limits.conf
+echo "james soft nproc 65535" >> /etc/security/limits.conf
+echo "james hard nproc 65535" >> /etc/security/limits.conf
+
+# Set hostname
+hostnamectl set-hostname m1
+
+# Install and configure NFS
 yum install -y nfs-utils
-
-# 创建共享目录
-mkdir /shared
-
-# 配置 NFS
-echo "/shared *(rw,sync,no_root_squash)" >> /etc/exports
-
-# 启动 NFS
 systemctl enable nfs-server
 systemctl start nfs-server
 
-# 安装必要的依赖
-yum install -y epel-release
-yum install -y munge munge-libs munge-devel mariadb-server mariadb-devel mariadb-libs mariadb-devel slurm slurm-munge slurm-slurmdbd slurm-devel slurm-perlapi
+# Create NFS directory
+mkdir /nfs
+chmod 777 /nfs
 
-# 配置 Munge
+# Add NFS share to /etc/exports
+echo "/nfs *(rw,sync,no_root_squash)" >> /etc/exports
+
+# Restart NFS service
+systemctl restart nfs-server
+
+# Configure SSH passwordless login
+ssh-keygen -t rsa
+ssh-copy-id c1
+ssh-copy-id c2
+
+
+# Install Munge
+yum install -y munge munge-libs munge-devel
+
+# Set UID and GID for Munge user
+MUNGE_UID=991
+MUNGE_GID=991
+
+# Create Munge user
+groupadd -g $MUNGE_GID munge
+useradd -u $MUNGE_UID -g $MUNGE_GID -s /sbin/nologin munge
+
+# Install rng-tools
+yum install -y rng-tools
+
+# Configure rngd service
+echo 'HRNGDEVICE=/dev/urandom' >> /etc/sysconfig/rngd
+echo 'RNGDOPTIONS="-W 2048 -r /dev/random -o /dev/random"' >> /etc/sysconfig/rngd
+
+# Start rngd service
+systemctl enable rngd
+systemctl start rngd
+
+# Generate Munge key
+dd if=/dev/urandom bs=1 count=1024 > /etc/munge/munge.key
+chown munge:munge /etc/munge/munge.key
+chmod 400 /etc/munge/munge.key
+
+# Copy Munge key to Compute Nodes
+for node in c1 c2; do
+    scp /etc/munge/munge.key $node:/etc/munge/munge.key
+    ssh $node chown munge:munge /etc/munge/munge.key
+    ssh $node chmod 400 /etc/munge/munge.key
+done
+
+# Start Munge service
 systemctl enable munge
 systemctl start munge
 
-# 配置 MariaDB
-systemctl enable mariadb
-systemctl start mariadb
+# Set UID and GID for Slurm user
+SLURM_UID=995
+SLURM_GID=995
 
-# 创建 Slurm 数据库
-mysql -u root <<EOF
-CREATE DATABASE slurmdb;
-CREATE USER 'slurm'@'localhost';
-SET PASSWORD FOR 'slurm'@'localhost' = PASSWORD('password');
-GRANT ALL PRIVILEGES ON slurmdb.* TO 'slurm'@'localhost';
-FLUSH PRIVILEGES;
-EOF
+# Create Slurm user
+groupadd -g $SLURM_GID slurm
+useradd -u $SLURM_UID -g $SLURM_GID -s /bin/false slurm
 
-# 配置 Slurm
+# Copy Slurm user to Compute Nodes
+for node in c1 c2; do
+    ssh $node groupadd -g $SLURM_GID slurm
+    ssh $node useradd -u $SLURM_UID -g $SLURM_GID -s /bin/false slurm
+done
+
+# Install Slurm
+yum install -y epel-release
+yum install -y slurm slurm-munge slurm-devel slurm-perlapi
+
+# Configure Slurm
 cp /etc/slurm/slurm.conf.example /etc/slurm/slurm.conf
-sed -i 's/ControlMachine=slurm/ControlMachine=<your_control_node_hostname>/g' /etc/slurm/slurm.conf
-sed -i 's/NodeName=linux NodeAddr=192.168.0.0/NodeName=<your_compute_node_hostname> NodeAddr=<your_compute_node_ip_address>/g' /etc/slurm/slurm.conf
-sed -i 's/PartitionName=debug Nodes=linux Default=YES/PartitionName=debug Nodes=<your_compute_node_hostname> Default=YES/g' /etc/slurm/slurm.conf
-sed -i 's/AccountingStorageType=accounting_storage/AccountingStorageType=accounting_storage/mysql/g' /etc/slurm/slurm.conf
-sed -i 's/AccountingStorageHost=localhost/AccountingStorageHost=<your_control_node_hostname>/g' /etc/slurm/slurm.conf
-sed -i 's/AccountingStoragePass=slurm/AccountingStoragePass=password/g' /etc/slurm/slurm.conf
+sed -i 's/ControlMachine=slurm/ControlMachine=m1/g' /etc/slurm/slurm.conf
+sed -i 's/NodeName=linux NodeAddr=192.168.0.0/NodeName=c1 NodeAddr=192.168.100.10/g' /etc/slurm/slurm.conf
+sed -i 's/PartitionName=debug Nodes=linux Default=YES/PartitionName=debug Nodes=c1,c2 Default=YES/g' /etc/slurm/slurm.conf
+scp /etc/slurm/slurm.conf c1:/etc/slurm/slurm.conf
+scp /etc/slurm/slurm.conf c2:/etc/slurm/slurm.conf
+chown slurm:slurm /etc/slurm/slurm.conf
+chmod 644 /etc/slurm/slurm.conf
 
-# 启动 Slurm
-systemctl enable slurmctld
-systemctl start slurmctld
-
-# 配置 Slurm 数据库
+# Configure Slurm Accounting
+cp /etc/slurm/slurmdbd.conf.example /etc/slurm/slurmdbd.conf
+sed -i 's/DbdAddr=localhost/DbdAddr=m1/g' /etc/slurm/slurmdbd.conf
+sed -i 's/StorageHost=localhost/StorageHost=m1/g' /etc/slurm/slurmdbd.conf
+sed -i 's/StoragePass=slurm/StoragePass=mysql1234/g' /etc/slurm/slurmdbd.conf
+sed -i 's/StorageUser=slurm/StorageUser=root/g' /etc/slurm/slurmdbd.conf
+sed -i 's/StoragePort=6819/StoragePort=3306/g' /etc/slurm/slurmdbd.conf
 systemctl enable slurmdbd
 systemctl start slurmdbd
-sacctmgr -i add cluster <your_cluster_name>
-sacctmgr -i add account <your_account_name>
-sacctmgr -i add user <your_username> account=<your_account_name> adminlevel=operator
+
+# Start Slurm
+systemctl enable slurmd
+systemctl start slurmd
+systemctl enable slurmctld
+systemctl start slurmctld
