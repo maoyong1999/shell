@@ -1,29 +1,34 @@
 #!/bin/bash
 
-# 安装nginx
-sudo apt-get update
-sudo apt-get install nginx -y
+# 安装HAPROXY
+yum install -y haproxy
 
-# 配置nginx
-sudo rm /etc/nginx/sites-enabled/default
-sudo touch /etc/nginx/sites-available/proxy
-sudo ln -s /etc/nginx/sites-available/proxy /etc/nginx/sites-enabled/proxy
+# 配置HAPROXY
+cat <<EOF > /etc/haproxy/haproxy.cfg
+global
+    log /dev/log    local0
+    log /dev/log    local1 notice
+    chroot /var/lib/haproxy
+    stats socket /run/haproxy/admin.sock mode 660 level admin expose-fd listeners
+    stats timeout 30s
+    user haproxy
+    group haproxy
+    daemon
 
-# 编辑nginx配置文件
-sudo bash -c "cat > /etc/nginx/sites-available/proxy <<EOF
-upstream backend {
-    server 192.168.100.12;
-    server 192.168.100.13;
-}
+defaults
+    log     global
+    mode    http
 
-server {
-    listen 80;
-    server_name proxy;
-    location / {
-        proxy_pass http://backend;
-    }
-}
-EOF"
+frontend http-in
+    bind 192.168.100.100:80
+    default_backend servers
 
-# 重启nginx
-sudo systemctl restart nginx
+backend servers
+    balance roundrobin
+    server web1 192.168.100.12:80 check
+    server web2 192.168.100.13:80 check
+EOF
+
+# 启动HAPROXY
+systemctl enable haproxy
+systemctl start haproxy

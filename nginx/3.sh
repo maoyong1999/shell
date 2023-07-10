@@ -1,37 +1,26 @@
 #!/bin/bash
 
-# 安装nginx
-sudo apt-get update
-sudo apt-get install nginx -y
+# 安装NGINX
+yum install -y epel-release
+yum install -y nginx
 
-# 配置nginx
-sudo rm /etc/nginx/sites-enabled/default
-sudo touch /etc/nginx/sites-available/web
-sudo ln -s /etc/nginx/sites-available/web /etc/nginx/sites-enabled/web
-
-# 编辑nginx配置文件
-sudo bash -c "cat > /etc/nginx/sites-available/web <<EOF
+# 配置NGINX
+cat <<EOF > /etc/nginx/conf.d/default.conf
 server {
     listen 80;
-    server_name web;
+    server_name web1;
+    root /usr/share/nginx/html;
+    index index.html;
+
     location / {
-        root /var/www/html;
-        index index.html;
+        try_files \$uri \$uri/ =404;
     }
 }
-EOF"
+EOF
 
 # 创建测试页面
-sudo bash -c "cat > /var/www/html/index.html <<EOF
-<html>
-    <head>
-        <title>Web Server 1</title>
-    </head>
-    <body>
-        <h1>Web Server 1</h1>
-    </body>
-</html>
-EOF"
+echo "This is Web Server 1" > /usr/share/nginx/html/index.html
 
-# 重启nginx
-sudo systemctl restart nginx
+# 启动NGINX
+systemctl enable nginx
+systemctl start nginx
