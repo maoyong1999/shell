@@ -26,9 +26,6 @@ server {
 }
 EOF
 
-# 创建测试页面
-echo "This is Web Server" > /usr/share/nginx/html/index.html
-
 # 启动NGINX
 systemctl enable nginx
 systemctl start nginx
