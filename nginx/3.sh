@@ -1,26 +1,34 @@
 #!/bin/bash
 
-# 安装NGINX
-yum install -y epel-release
-yum install -y nginx
+# 安装keepalived
+yum install -y keepalived
 
-# 配置NGINX
-cat <<EOF > /etc/nginx/conf.d/default.conf
-server {
-    listen 80;
-    server_name web1;
-    root /usr/share/nginx/html;
-    index index.html;
+# 配置keepalived
+cat <<EOF > /etc/keepalived/keepalived.conf
+vrrp_script chk_nginx {
+    script "/usr/bin/pgrep nginx"
+    interval 2
+}
 
-    location / {
-        try_files \$uri \$uri/ =404;
+vrrp_instance VI_1 {
+    state MASTER
+    interface ens224
+    virtual_router_id 51
+    priority 101
+    advert_int 1
+    authentication {
+        auth_type PASS
+        auth_pass 1111
+    }
+    virtual_ipaddress {
+        192.168.100.100
+    }
+    track_script {
+        chk_nginx
     }
 }
 EOF
 
-# 创建测试页面
-echo "This is Web Server 1" > /usr/share/nginx/html/index.html
-
-# 启动NGINX
-systemctl enable nginx
-systemctl start nginx
+# 启动keepalived
+systemctl enable keepalived
+systemctl start keepalived

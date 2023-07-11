@@ -1,34 +1,34 @@
 #!/bin/bash
 
-# 安装HAPROXY
-yum install -y haproxy
+# 安装NGINX
+yum install -y epel-release
+yum install -y nginx
 
-# 配置HAPROXY
-cat <<EOF > /etc/haproxy/haproxy.cfg
-global
-    log /dev/log    local0
-    log /dev/log    local1 notice
-    chroot /var/lib/haproxy
-    stats socket /run/haproxy/admin.sock mode 660 level admin expose-fd listeners
-    stats timeout 30s
-    user haproxy
-    group haproxy
-    daemon
+# 配置NGINX
+cat <<EOF > /etc/nginx/conf.d/default.conf
+upstream backend {
+    server 192.168.100.12;
+    server 192.168.100.13;
+}
 
-defaults
-    log     global
-    mode    http
+server {
+    listen 80;
+    server_name web;
+    root /usr/share/nginx/html;
+    index index.html;
 
-frontend http-in
-    bind 192.168.100.100:80
-    default_backend servers
-
-backend servers
-    balance roundrobin
-    server web1 192.168.100.12:80 check
-    server web2 192.168.100.13:80 check
+    location / {
+        proxy_pass http://backend;
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+    }
+}
 EOF
 
-# 启动HAPROXY
-systemctl enable haproxy
-systemctl start haproxy
+# 创建测试页面
+echo "This is Web Server" > /usr/share/nginx/html/index.html
+
+# 启动NGINX
+systemctl enable nginx
+systemctl start nginx
