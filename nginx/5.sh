@@ -19,8 +19,38 @@ server {
 EOF
 
 # 创建测试页面
-echo "This is Web Server 2" > /usr/share/nginx/html/index.html
+# echo "This is Web Server 1" > /usr/share/nginx/html/index.html
 
+cat <<EOF > /usr/share/nginx/html/index.html
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Test Page</title>
+    <style>
+        body {
+            text-align: center;
+        }
+        h1 {
+            font-size: 24px;
+        }
+        .highlight {
+            font-size: 48px;
+            color: red;
+            animation: blink 1s infinite;
+        }
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>This is Web Server <span class="highlight">02</span></h1>
+</body>
+</html>
+EOF
 # 启动NGINX
 systemctl enable nginx
 systemctl start nginx
