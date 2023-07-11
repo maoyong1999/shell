@@ -19,7 +19,7 @@ server {
 EOF
 
 # 创建测试页面
-echo "This is Web Server 2" > /usr/share/nginx/html/index.html
+echo "This is Web Server 1" > /usr/share/nginx/html/index.html
 
 # 启动NGINX
 systemctl enable nginx
