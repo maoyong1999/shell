@@ -46,7 +46,7 @@ vrrp_script chk_haproxy {
 }
 
 vrrp_instance VI_1 {
-    interface eth0
+    interface ens224
     state BACKUP
     virtual_router_id 51
     priority 100
