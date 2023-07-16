@@ -38,6 +38,17 @@ listen redis
     tcp-check expect string +PONG
     tcp-check send AUTH P@ssw0rd\r\n
     tcp-check expect string +OK
+
+frontend http-in
+    bind *:80
+    mode http
+    default_backend nginx-backend
+
+backend nginx-backend
+    mode http
+    balance roundrobin
+    server nginx01 192.168.100.12:80 check
+    server nginx02 192.168.100.13:80 check      
 EOF
 
 # 配置 keepalived
