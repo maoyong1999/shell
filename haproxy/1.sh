@@ -77,6 +77,10 @@ vrrp_instance VI_1 {
 }
 EOF
 
+# 创建 haproxy 运行目录
+sudo mkdir -p /run/haproxy
+sudo touch /run/haproxy/admin.sock
+
 # 启动 haproxy 和 keepalived
 systemctl enable haproxy
 systemctl enable keepalived
