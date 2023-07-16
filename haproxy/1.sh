@@ -32,8 +32,8 @@ listen redis
     bind *:6379
     mode tcp
     balance roundrobin
-    server redis01 192.168.100.18:6379 check inter 1000 rise 2 fall 3
-    server redis02 192.168.100.19:6379 check inter 1000 rise 2 fall 3
+    server redis01 192.168.100.20:6379 check inter 1000 rise 2 fall 3
+    server redis02 192.168.100.21:6379 check inter 1000 rise 2 fall 3
     tcp-check send PING\r\n
     tcp-check expect string +PONG
     tcp-check send AUTH P@ssw0rd\r\n
