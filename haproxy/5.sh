@@ -4,9 +4,9 @@
 yum install -y gcc pcre-devel openssl-devel
 
 # 下载 HAProxy 源码
-wget http://www.haproxy.org/download/2.4/src/haproxy-2.4.4.tar.gz
-tar -xzf haproxy-2.4.4.tar.gz
-cd haproxy-2.4.4
+wget http://www.haproxy.org/download/2.4/src/haproxy-2.8.1.tar.gz
+tar -xzf haproxy-2.8.1.tar.gz
+cd haproxy-2.8.1
 
 # 编译和安装 HAProxy
 make TARGET=linux-glibc USE_PCRE=1 USE_OPENSSL=1 USE_ZLIB=1
