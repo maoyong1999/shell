@@ -55,39 +55,6 @@ EOF
 # 创建 Blackbox 配置文件
 cat <<EOF > /opt/blackbox_exporter/config/blackbox.yml
 modules:
-  http_2xx:
-    prober: http
-    timeout: 5s
-    http:
-      preferred_ip_protocol: "ip4"
-      method: GET
-      headers:
-        Host: "example.com"
-      no_follow_redirects: false
-      fail_if_ssl: false
-      fail_if_not_ssl: false
-      tls_config:
-        insecure_skip_verify: true
-  icmp:
-    prober: icmp
-    timeout: 5s
-  tcp_connect:
-    prober: tcp
-    timeout: 5s
-  udp:
-    prober: udp
-    timeout: 5s
-  dns:
-    prober: dns
-    timeout: 5s
-    dns:
-      transport_protocol: udp
-      preferred_ip_protocol: "ip4"
-  tcp_tls:
-    prober: tcp
-    timeout: 5s
-    tcp:
-      tls: true
 EOF
 
 # 添加需要检测的协议和端口
