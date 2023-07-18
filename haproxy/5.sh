@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # 安装编译工具和依赖库
-yum install -y gcc pcre-devel openssl-devel
+yum install -y gcc pcre-devel openssl-devel wget
 
 # 下载 HAProxy 源码
-wget http://www.haproxy.org/download/2.4/src/haproxy-2.8.1.tar.gz
+# wget http://www.haproxy.org/download/2.4/src/haproxy-2.8.1.tar.gz
 tar -xzf haproxy-2.8.1.tar.gz
 cd haproxy-2.8.1
 
