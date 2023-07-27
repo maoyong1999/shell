@@ -12,13 +12,13 @@ source /etc/profile
 
 # 下载 Tomcat
 echo "正在下载 Tomcat..."
-curl -O https://downloads.apache.org/tomcat/tomcat-9/v9.0.52/bin/apache-tomcat-9.0.52.tar.gz
+curl -O https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.78/bin/apache-tomcat-9.0.78.tar.gz
 
 # 解压 Tomcat
 echo "正在解压 Tomcat..."
-tar -xzf apache-tomcat-9.0.52.tar.gz
-mv apache-tomcat-9.0.52 /usr/local/tomcat
-rm -f apache-tomcat-9.0.52.tar.gz
+tar -xzf apache-tomcat-9.0.78.tar.gz
+mv apache-tomcat-9.0.78 /usr/local/tomcat
+rm -f apache-tomcat-9.0.78.tar.gz
 
 # 配置 Tomcat 环境变量
 echo "正在配置 Tomcat 环境变量..."
