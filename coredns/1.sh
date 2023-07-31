@@ -22,19 +22,17 @@ cat <<EOF > /etc/coredns/zones/db.internal
 example.com. {
     192.168.100.1    k8s-master
     192.168.100.2    k8s-node01
-•	192.168.100.3    k8s-node02    
-•	192.168.100.4    prometheus01
-•	192.168.100.5    haproxytest
-•	192.168.100.6    zabbix
-•	192.168.100.7    winclient
-•	192.168.100.8    gitlab
-•	192.168.100.9    blackbox
-•	192.168.100.10    nginx01
-•	192.168.100.11    nginx02
-•	192.168.100.12    web01
-•	192.168.100.13    web02
-
-
+    192.168.100.3    k8s-node02    
+    192.168.100.4    prometheus01
+    192.168.100.5    haproxytest
+    192.168.100.6    zabbix
+    192.168.100.7    winclient
+    192.168.100.8    gitlab
+    192.168.100.9    blackbox
+    192.168.100.10    nginx01
+    192.168.100.11    nginx02
+    192.168.100.12    web01
+    192.168.100.13    web02
 }
 EOF
 
