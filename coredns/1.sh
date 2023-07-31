@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 安装 CoreDNS
-wget https://github.com/coredns/coredns/releases/download/v1.10.1/coredns_1.10.1_linux_amd64.tgz
+# wget https://github.com/coredns/coredns/releases/download/v1.10.1/coredns_1.10.1_linux_amd64.tgz
 tar -zxvf coredns_1.10.1_linux_amd64.tgz
 mv coredns /usr/local/bin/
 
@@ -20,16 +20,21 @@ EOF
 # 创建内网主机名和IP的解析文件
 cat <<EOF > /etc/coredns/zones/db.internal
 example.com. {
-    10.0.0.1    host1.example.com
-    10.0.0.2    host2.example.com
-    10.0.0.3    host3.example.com
-    10.0.0.4    host4.example.com
-    10.0.0.5    host5.example.com
-    10.0.0.6    host6.example.com
-    10.0.0.7    host7.example.com
-    10.0.0.8    host8.example.com
-    10.0.0.9    host9.example.com
-    10.0.0.10   host10.example.com
+    192.168.100.1    k8s-master
+    192.168.100.2    k8s-node01
+•	192.168.100.3    k8s-node02    
+•	192.168.100.4    prometheus01
+•	192.168.100.5    haproxytest
+•	192.168.100.6    zabbix
+•	192.168.100.7    winclient
+•	192.168.100.8    gitlab
+•	192.168.100.9    blackbox
+•	192.168.100.10    nginx01
+•	192.168.100.11    nginx02
+•	192.168.100.12    web01
+•	192.168.100.13    web02
+
+
 }
 EOF
 
