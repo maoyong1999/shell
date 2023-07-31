@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # 安装 CoreDNS
-wget https://github.com/coredns/coredns/releases/download/v1.8.4/coredns_1.8.4_linux_amd64.tgz
-tar -zxvf coredns_1.8.4_linux_amd64.tgz
+wget https://github.com/coredns/coredns/releases/download/v1.10.1/coredns_1.10.1_linux_amd64.tgz
+tar -zxvf coredns_1.10.1_linux_amd64.tgz
 mv coredns /usr/local/bin/
 
 # 创建 CoreDNS 配置文件
