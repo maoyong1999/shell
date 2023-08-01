@@ -5,6 +5,9 @@
 tar -zxvf coredns_1.10.1_linux_amd64.tgz
 mv coredns /usr/local/bin/
 
+sudo touch /etc/coredns/Corefile
+sudo touch /etc/coredns/zones/db.internal
+
 # 创建 CoreDNS 配置文件
 cat <<EOF > /etc/coredns/Corefile
 .:53 {

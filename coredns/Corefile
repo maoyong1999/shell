@@ -1,0 +1,17 @@
+. {
+    log
+    errors
+}
+
+james.local {
+    file /etc/coredns/zones/james.local.db
+}
+
+ns1.james.local {
+    file /etc/coredns/zones/ns1.james.local.db
+}
+
+ns2.james.local {
+    file /etc/coredns/zones/ns2.james.local.db
+}
+
