@@ -1,12 +1,8 @@
 #!/bin/bash
 
 # 安装 CoreDNS
-# wget https://github.com/coredns/coredns/releases/download/v1.10.1/coredns_1.10.1_linux_amd64.tgz
 tar -zxvf coredns_1.10.1_linux_amd64.tgz
 mv coredns /usr/local/bin/
-
-sudo touch /etc/coredns/Corefile
-sudo touch /etc/coredns/zones/db.internal
 
 # 创建 CoreDNS 配置文件
 cat <<EOF > /etc/coredns/Corefile
@@ -14,29 +10,39 @@ cat <<EOF > /etc/coredns/Corefile
     forward . 223.5.5.5 8.8.8.8
     health
     prometheus
-    file /etc/coredns/zones/db.internal example.com {
+    file /etc/coredns/zones/james.local james.local {
         reload 1s
     }
 }
 EOF
 
-# 创建内网主机名和IP的解析文件
-cat <<EOF > /etc/coredns/zones/db.internal
-example.com. {
-    192.168.100.1    k8s-master
-    192.168.100.2    k8s-node01
-    192.168.100.3    k8s-node02    
-    192.168.100.4    prometheus01
-    192.168.100.5    haproxytest
-    192.168.100.6    zabbix
-    192.168.100.7    winclient
-    192.168.100.8    gitlab
-    192.168.100.9    blackbox
-    192.168.100.10    nginx01
-    192.168.100.11    nginx02
-    192.168.100.12    web01
-    192.168.100.13    web02
-}
+# 创建 james.local 的解析文件
+cat <<EOF > /etc/coredns/zones/james.local
+\$TTL 1h
+@       IN      SOA     ns1.james.local. admin.james.local. (
+                        2021102001      ; serial
+                        1h              ; refresh
+                        10m             ; retry
+                        1w              ; expire
+                        1h              ; minimum
+                        )
+        IN      NS      ns1.james.local.
+        IN      NS      ns2.james.local.
+ns1     IN      A       192.168.100.25
+ns2     IN      A       192.168.100.26
+k8s-master      IN      A       192.168.100.1
+k8s-node01      IN      A       192.168.100.2
+k8s-node02      IN      A       192.168.100.3
+prometheus01    IN      A       192.168.100.4
+haproxytest     IN      A       192.168.100.5
+zabbix          IN      A       192.168.100.6
+winclient       IN      A       192.168.100.7
+gitlab          IN      A       192.168.100.8
+blackbox        IN      A       192.168.100.9
+nginx01         IN      A       192.168.100.10
+nginx02         IN      A       192.168.100.11
+web01           IN      A       192.168.100.12
+web02           IN      A       192.168.100.13
 EOF
 
 # 创建 CoreDNS systemd 配置文件
@@ -47,26 +53,19 @@ Documentation=https://coredns.io/manual/toc/
 After=network.target
 
 [Service]
-User=root
 ExecStart=/usr/local/bin/coredns -conf /etc/coredns/Corefile
-Restart=on-failure
+Restart=always
+User=root
 
 [Install]
 WantedBy=multi-user.target
 EOF
 
-# 启动 CoreDNS
+# 重载 systemd 配置文件
 systemctl daemon-reload
+
+# 启动 CoreDNS 服务
 systemctl start coredns
+
+# 设置 CoreDNS 开机自启
 systemctl enable coredns
-
-# 安装 CoreDNS 健康检查插件
-wget https://github.com/miekg/coredns-health/releases/download/v1.0.1/health_linux_amd64.tgz
-tar -zxvf health_linux_amd64.tgz
-mv health /usr/local/bin/
-
-# 修改 CoreDNS 配置文件，增加健康检查插件
-sed -i '/health/a\    health' /etc/coredns/Corefile
-
-# 重启 CoreDNS
-systemctl restart coredns
