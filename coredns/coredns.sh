@@ -30,19 +30,19 @@ cat <<EOF > /etc/coredns/zones/james.local
         IN      NS      ns2.james.local.
 ns1     IN      A       192.168.100.25
 ns2     IN      A       192.168.100.26
-k8s-master      IN      A       192.168.100.1
-k8s-node01      IN      A       192.168.100.2
-k8s-node02      IN      A       192.168.100.3
-prometheus01    IN      A       192.168.100.4
-haproxytest     IN      A       192.168.100.5
-zabbix          IN      A       192.168.100.6
-winclient       IN      A       192.168.100.7
-gitlab          IN      A       192.168.100.8
-blackbox        IN      A       192.168.100.9
-nginx01         IN      A       192.168.100.10
-nginx02         IN      A       192.168.100.11
-web01           IN      A       192.168.100.12
-web02           IN      A       192.168.100.13
+k8s-master.james.local.      IN      A       192.168.100.1
+k8s-node01.james.local.      IN      A       192.168.100.2
+k8s-node02.james.local.      IN      A       192.168.100.3
+prometheus01.james.local.    IN      A       192.168.100.4
+haproxytest.james.local.     IN      A       192.168.100.5
+zabbix.james.local.          IN      A       192.168.100.6
+winclient.james.local.       IN      A       192.168.100.7
+gitlab.james.local.          IN      A       192.168.100.8
+blackbox.james.local.        IN      A       192.168.100.9
+nginx01.james.local.         IN      A       192.168.100.10
+nginx02.james.local.         IN      A       192.168.100.11
+web01.james.local.           IN      A       192.168.100.12
+web02.james.local.           IN      A       192.168.100.13
 EOF
 
 # 创建 CoreDNS systemd 配置文件
