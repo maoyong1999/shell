@@ -30,9 +30,9 @@ cat <<EOF > /etc/coredns/zones/james.local
         IN      NS      ns2.james.local.
 ns1     IN      A       192.168.100.25
 ns2     IN      A       192.168.100.26
-k8s-master.james.local.      IN      A       192.168.100.1
-k8s-node01.james.local.      IN      A       192.168.100.2
-k8s-node02.james.local.      IN      A       192.168.100.3
+k8smaster.james.local.      IN      A       192.168.100.1
+k8snode01.james.local.      IN      A       192.168.100.2
+k8snode02.james.local.      IN      A       192.168.100.3
 prometheus01.james.local.    IN      A       192.168.100.4
 haproxytest.james.local.     IN      A       192.168.100.5
 zabbix.james.local.          IN      A       192.168.100.6
