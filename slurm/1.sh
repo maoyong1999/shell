@@ -84,6 +84,7 @@ chmod 400 /etc/munge/munge.key
 
 # Copy Munge key to Compute Nodes
 for node in c1 c2; do
+    ssh $node mkdir /etc/munge/
     scp /etc/munge/munge.key $node:/etc/munge/munge.key
     ssh $node chown munge:munge /etc/munge/munge.key
     ssh $node chmod 400 /etc/munge/munge.key
