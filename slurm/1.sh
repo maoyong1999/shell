@@ -3,8 +3,8 @@
 # Set variables
 CONTROL_NODE="m1"
 COMPUTE_NODES=("c1" "c2")
-CONTROL_NODE_IP="192.168.100.16"
-C1_IP="192.168.100.15"
+CONTROL_NODE_IP="192.168.100.15"
+C1_IP="192.168.100.16"
 C2_IP="192.168.100.17"
 
 # Configure hosts file on control node
