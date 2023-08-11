@@ -132,6 +132,7 @@ sed -i 's/StoragePort=6819/StoragePort=3306/g' /etc/slurm/slurmdbd.conf
 
 # Copy Slurm configuration file to compute nodes
 for node in "${COMPUTE_NODES[@]}"; do
+    ssh $node mkdir /etc/slurm/
     scp /etc/slurm/slurm.conf $node:/etc/slurm/
 done
 
