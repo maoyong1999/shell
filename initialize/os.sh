@@ -70,10 +70,12 @@ hostnamectl set-hostname $hostname
 sed -i "s/^127.0.0.1.*/127.0.0.1\t$hostname localhost.localdomain localhost/g" /etc/hosts
 
 # 备份原有 Yum 源文件
-mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bak
+# mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bak
 
 # 下载阿里云 Yum 源文件
 curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+
+sed -i -e '/mirrors.cloud.aliyuncs.com/d' -e '/mirrors.aliyuncs.com/d' /etc/yum.repos.d/CentOS-Base.repo
 
 # 备份原有 EPEL 源文件
 mv /etc/yum.repos.d/epel.repo /etc/yum.repos.d/epel.repo.bak
