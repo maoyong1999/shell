@@ -89,13 +89,14 @@ mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
 
 # 配置阿里云的 YUM 源
 # wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+wget -O /etc/yum.repos.d/CentOS-aliyun.repo http://mirrors.aliyun.com/repo/Centos-7.repo
 
 # 配置清华大学的 YUM 源
 wget -O /etc/yum.repos.d/CentOS-Tsinghua.repo https://mirrors.tuna.tsinghua.edu.cn/help/centos/
 
 # 配置上海交大的 YUM 源
 # wget -O /etc/yum.repos.d/CentOS-SJTUG.repo https://mirrors.sjtug.sjtu.edu.cn/centos/7/os/x86_64/
-sed -e 's/mirrorlist/#mirrorlist/g' -e 's|#baseurl=http://mirror.centos.org/|baseurl=http://mirror.sjtu.edu.cn/|g' -i.bak /etc/yum.repos.d/CentOS-Base.repo
+# sed -e 's/mirrorlist/#mirrorlist/g' -e 's|#baseurl=http://mirror.centos.org/|baseurl=http://mirror.sjtu.edu.cn/|g' -i.bak /etc/yum.repos.d/CentOS-Base.repo
 
 # 配置网易的 YUM 源
 wget -O /etc/yum.repos.d/CentOS-163.repo http://mirrors.163.com/.help/CentOS7-Base-163.repo
@@ -115,8 +116,10 @@ yum makecache
 # 自动选择最快的 YUM 源
 yum install -y yum-plugin-fastestmirror
 
+yum -y update
+
 # 安装 NTP
-yum install -y ntp
+yum install -y ntp lrzsz net-tools
 
 # 配置时区为上海
 timedatectl set-timezone Asia/Shanghai
