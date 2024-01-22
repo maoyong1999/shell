@@ -1,0 +1,13 @@
+version: '3.1'
+
+services:
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: P@ssw0rd  # 请将此处替换为你的MySQL root密码
+    volumes:
+      - ./mysql-data:/var/lib/mysql  # 持久化MySQL数据
+      - ./mysql-conf:/etc/mysql/conf.d  # 持久化MySQL配置文件
+    ports:
+      - 3306:3306

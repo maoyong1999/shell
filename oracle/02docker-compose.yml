@@ -1,0 +1,11 @@
+version: '3.1'
+
+services:
+  oracledb_exporter:
+    image: ghcr.io/iamseth/oracledb_exporter:0.5.0
+    container_name: oracledb_exporter
+    restart: always
+    ports:
+      - 9161:9161
+    environment:
+      - DATA_SOURCE_NAME=oracle://system:oracle@192.168.100.10:1521/xe

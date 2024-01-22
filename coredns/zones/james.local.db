@@ -1,0 +1,27 @@
+$ORIGIN james.local.
+$TTL 3600
+@       IN      SOA     ns1.james.local. admin.james.local. (
+                        2023080101 ; serial
+                        3600       ; refresh
+                        600        ; retry
+                        604800     ; expire
+                        3600       ; minimum TTL
+                        )
+        IN      NS      ns1.james.local.
+        IN      NS      ns2.james.local.
+ns1     IN      A       192.168.100.25
+ns2     IN      A       192.168.100.26
+k8s-master.james.local.      IN      A       192.168.100.1
+k8snode01.james.local.       IN      A       192.168.100.2
+k8snode02.james.local.       IN      A       192.168.100.3
+prometheus01.james.local.    IN      A       192.168.100.4
+haproxytest.james.local.     IN      A       192.168.100.5
+zabbix.james.local.          IN      A       192.168.100.6
+winclient.james.local.       IN      A       192.168.100.7
+gitlab.james.local.          IN      A       192.168.100.8
+blackbox.james.local.        IN      A       192.168.100.9
+nginx01.james.local.         IN      A       192.168.100.10
+nginx02.james.local.         IN      A       192.168.100.11
+web01.james.local.           IN      A       192.168.100.12
+web02.james.local.           IN      A       192.168.100.13
+

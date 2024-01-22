@@ -1,0 +1,5 @@
+
+# 脚本目录：
+
+1. 1.sh 用于系统初始化
+2. 2.sh 用于部署Prometheus、Grafana、Alertmanager

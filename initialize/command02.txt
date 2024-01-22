@@ -1,0 +1,69 @@
+nmcli device status
+nmcli device connect eth0
+nmcli connection up eth0
+nmcli connection show
+nmcli connection down eth0
+
+nmcli device disconnect eth0
+nmcli connection show
+nmcli connection show --active
+nmcli connection show --active | grep -v NAME | awk '{print $1}'
+nmcli connection show --active | grep -v NAME | awk '{print $1}' | xargs -n1 nmcli connection down
+
+    
+    1  mv /etc/yum.repos.d /etc/yum.repos.d.backup
+    2  mkdir /etc/yum.repos.d
+    3  wget -O /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-vault-8.5.2111.repo
+    4  yum clean all && yum makecache
+    5  yum update -y
+    6  yum install -y yum-utils device-mapper-persistent-data lvm2
+    7  yum install -y docker-ce docker-ce-cli containerd.io docker-compose
+    8  yum install -y docker-ce docker-ce-cli containerd.io 
+    9  sudo yum install -y docker-ce
+   10  dnf -y  install docker-ce  docker-ce-cli --nobest
+   11  dnf -y  install docker-ce  docker-ce-cli --nobest --alowerasing
+   12  yum install -y yum-utils
+   13  yum install docker-ce docker-ce-cli containerd.io
+   14  sudo yum install -y --allowerasing docker-ce docker-ce-cli containerd.io docker-compose
+   15  sudo yum install -y --allowerasing docker-ce docker-ce-cli containerd.io
+   16  systemctl status docker
+   17  sudo yum install -y --allowerasing docker-ce docker-ce-cli containerd.io docker-compose
+   18  sudo yum install -y --skip-broken docker-ce docker-ce-cli containerd.io docker-compose
+   19  sudo yum install -y --nobest docker-ce docker-ce-cli containerd.io docker-compose
+   20  cat /etc/yum.repos.d/CentOS-Base.repo 
+   21  yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+   22  sudo yum install -y --allowerasing docker-ce docker-ce-cli containerd.io docker-compose
+   23  sudo yum install -y --skip-broken docker-ce docker-ce-cli containerd.io docker-compose
+   24  systemctl status docker
+   25  systemctl start docker
+   26  systemctl status docker
+   27  sudo yum install -y --skip-broken docker-ce docker-ce-cli containerd.io docker-compose
+   28  yum install -y docker-ce docker-ce-cli containerd.io 
+   29  yum install -y docker-ce docker-ce-cli containerd.io --allowerasing
+   30  systemctl status docker
+   31  systemctl start docker
+   32  systemctl status docker
+   33  sudo tee /etc/docker/daemon.json <<-'EOF'
+{
+  "registry-mirrors": ["https://jx9181e6.mirror.aliyuncs.com"]
+}
+EOF
+
+   34  sudo systemctl daemon-reload
+   35  sudo systemctl restart docker
+   36  systemctl status docker
+   37  docker run hello-world
+   38  docker ps
+   39  ls
+   40  cd ~
+   41  ls
+   42  top
+   43  ls
+   44  docker ps
+   45  scp root@192.168.8.75:/root/infercnv.tar .
+   46  ls
+   47  docker load -i infercnv.tar
+   48  docker images
+   49  docker run --rm -it -v `pwd`:`pwd` trinityctat/infercnv:latest bash
+   50  ls
+   51  history > command02.txt

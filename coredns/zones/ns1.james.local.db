@@ -1,0 +1,12 @@
+$ORIGIN ns1.james.local.
+$TTL 3600
+@       IN      SOA     ns1.james.local. admin.james.local. (
+                        2023080101 ; serial
+                        3600       ; refresh
+                        600        ; retry
+                        604800     ; expire
+                        3600       ; minimum TTL
+                        )
+        IN      NS      ns1.james.local.
+        IN      A       192.168.100.25
+

@@ -1,0 +1,14 @@
+[Unit]
+Description=MySQL service for instance mysql2
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/mysqld_safe --defaults-file=/etc/mysql2/my.cnf
+User=mysql
+Group=mysql
+Restart=always
+RestartSec=3
+StartLimitInterval=0
+
+[Install]
+WantedBy=multi-user.target
