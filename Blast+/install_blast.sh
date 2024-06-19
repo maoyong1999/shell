@@ -9,6 +9,16 @@ sudo yum update -y
 sudo yum groupinstall "Development Tools" -y
 sudo yum install -y wget
 
+# 安装SCL（Software Collections）并启用devtoolset-9（GCC 9）
+echo "安装并启用GCC 9..."
+sudo yum install -y centos-release-scl
+sudo yum install -y devtoolset-9
+source /opt/rh/devtoolset-9/enable
+
+# 验证GCC版本
+echo "验证GCC版本..."
+gcc --version
+
 # 安装额外依赖
 echo "安装额外依赖..."
 sudo yum install -y ncurses-devel zlib-devel bzip2-devel xz-devel sqlite-devel
